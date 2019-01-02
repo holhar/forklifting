@@ -16,32 +16,32 @@ import java.util.UUID;
 @SpringBootApplication
 public class DemoApplication {
 
- public static void main(String[] args) {
-  SpringApplication.run(DemoApplication.class, args);
- }
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 }
 
 @RestController
 class SessionController {
 
- private final String ip;
+    private final String ip;
 
- @Autowired
- public SessionController(@Value("${CF_INSTANCE_IP:127.0.0.1}") String ip) {
-  this.ip = ip;
- }
+    @Autowired
+    public SessionController(@Value("${CF_INSTANCE_IP:127.0.0.1}") String ip) {
+        this.ip = ip;
+    }
 
- @GetMapping("/hi")
- Map<String, String> uid(HttpSession session) {
-  // <1>
-  UUID uid = Optional.ofNullable(UUID.class.cast(session.getAttribute("uid")))
-   .orElse(UUID.randomUUID());
-  session.setAttribute("uid", uid);
+    @GetMapping("/hi")
+    Map<String, String> uid(HttpSession session) {
+        // <1>
+        UUID uid = Optional.ofNullable(UUID.class.cast(session.getAttribute("uid")))
+                .orElse(UUID.randomUUID());
+        session.setAttribute("uid", uid);
 
-  Map<String, String> m = new HashMap<>();
-  m.put("instance_ip", this.ip);
-  m.put("uuid", uid.toString());
-  return m;
- }
+        Map<String, String> m = new HashMap<>();
+        m.put("instance_ip", this.ip);
+        m.put("uuid", uid.toString());
+        return m;
+    }
 
 }
